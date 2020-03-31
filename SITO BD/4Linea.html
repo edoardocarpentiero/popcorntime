@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>PopCorn Time</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+  <script src="Chart.min.js"></script>
+  <script src="utils.js"></script>
+  <style>
+  canvas {
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+  }
+  </style>
+
+</head>
+<body onload="resize()">
+
+<div  style="background-color: #08AEEA;background-image: linear-gradient(0deg, #08AEEA 0%, #2AF598 100%);" class="text-center shadow-lg">
+  <img style="width: 30%;"src="img/main.png">
+</div>
+  
+<div class="container">
+  <div class="row">
+    <div class="col-sm-12 text-center">
+      <br>
+      <h3>Andamento degli incassi</h3>
+    </div>
+  </div>
+</div>
+
+
+<div class="container">
+  <div class="row">
+    <div class="col-sm-12 text-center">
+
+
+      <div class="chart-container" style=" height:90%; width:90%">
+        <canvas id="canvas"></canvas>
+      </div>
+      
+      
+     
+    </div>
+  </div>
+</div>
+
+
+<script>
+    var infoURL=window.location.search.substring(1).split('&');
+    daAnno=infoURL[0];
+    aAnno=infoURL[1];
+    genereSelezionato=infoURL[2];
+
+    var incassi=[];
+    var anni=[];
+
+    $.ajax({
+        url: "http://localhost:8080/api/getRevenue/"+daAnno+"_"+aAnno+"/"+genereSelezionato,
+        type: "GET",
+        dataType: 'json',
+        contentType: "application/json",
+        success: function(resp){
+            $.each(resp.data, function( index, value ) {
+                incassi.push(value.somma);
+                anni.push(value._id);
+            });
+            datiRicavati.innerHTML=dati;
+        },
+        error: function(err){
+            console.log(err)
+        }
+      })
+
+
+
+    var MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    var config = {
+      type: 'line',
+      data: {
+        labels: anni,
+        datasets: [{
+          label: 'Incasso ricavato',
+          backgroundColor: window.chartColors.red,
+          borderColor: window.chartColors.red,
+          data: incassi,
+          fill: false,
+        }]
+      },
+      options: {
+        responsive: true,
+        title: {
+          display: true,
+          text: ''
+        },
+        tooltips: {
+          mode: 'index',
+          intersect: false,
+        },
+        hover: {
+          mode: 'nearest',
+          intersect: true
+        },
+        scales: {
+          xAxes: [{
+            display: true,
+            scaleLabel: {
+              display: true,
+              labelString: 'Anni'
+            }
+          }],
+          yAxes: [{
+            display: true,
+            scaleLabel: {
+              display: true,
+              labelString: 'Incassi $'
+            }
+          }]
+        }
+      }
+    };
+
+    window.onload = function() {
+      var ctx = document.getElementById('canvas').getContext('2d');
+      window.myLine = new Chart(ctx, config);
+    };
+
+  
+  setTimeout(myFunction, 200);
+
+    function myFunction(){
+      window.myLine.update();
+    }
+
+  </script>
+
+</body>
+</html>
+

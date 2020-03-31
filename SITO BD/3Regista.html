@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Pop Corn Time</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+ <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+  <script  type="text/javascript" src="jsListaRegisti.js"></script>
+
+</head>
+<body>
+
+<div  style="background-color: #08AEEA;background-image: linear-gradient(0deg, #08AEEA 0%, #2AF598 100%);" class="text-center shadow-lg" >
+  <img style="width: 50%;"src="img/main.png">
+</div>
+
+
+
+<div class="container" style="margin-top:30px">
+  <div class="row">
+    <div class="col-sm-3">
+      <h2>Ricerca:</h2>
+      <ul class="nav nav-pills flex-column">
+        <li class="nav-item">
+          <a class="nav-link " href="index.html">Generica</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="1genere.html">Confronto Generi</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="2RangeAnni.html">Film per anni</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" href="3Regista.html">Confronto registi</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="4Ricavo.html">Incassi per genere</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="5Attore.html">Peggiori film per attore</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="6Rating.html">Migliori film per anno</a>
+        </li>
+      </ul>
+      <hr class="d-sm-none">
+    </div>
+    <div class="col-sm-9">
+       <div class="row">
+
+        <div class="col-sm-12 text-center">
+        <br>
+        <h4>Confronta Registi</h4>
+        <p>Confronta le informazioni relative a due registi differenti</p>
+        </div>
+
+      <div class="col-sm-4">
+      <h5>Step 1</h5>
+        
+        <div class="form-group">
+          <label for="usr">Seleziona primo Regista:</label>
+          <div class="autocomplete">
+            <input id="regista1" class="form-control" type="text" name="regista1" placeholder="Regista 1">
+          </div>
+        </div>
+
+
+        <div class="form-group">
+          <label for="usr">Seleziona secondo Regista:</label>
+          <div class="autocomplete">
+            <input id="regista2" class="form-control" type="text" name="regista2" placeholder="Regista 2">
+          </div>
+        </div>
+
+    </div>
+
+    <div class="col-sm-4">
+      <h5>Step 2</h5>
+        <label >Seleziona:</label> <br>
+        <div class="form-check">
+          <label class="form-check-label">
+            <input type="checkbox" class="form-check-input" id="numeroFilm" value="">Numero Film
+          </label>
+        </div>
+        <div class="form-check">
+          <label class="form-check-label">
+            <input type="checkbox" class="form-check-input" id="ratingMedio" value="">Rating Medio
+          </label>
+        </div>
+        <div class="form-check">
+          <label class="form-check-label">
+            <input type="checkbox" class="form-check-input" id="incassoTotale" value="" >Incasso Totale
+          </label>
+        </div>
+        <div class="form-check">
+          <label class="form-check-label">
+            <input type="checkbox" class="form-check-input" id="metascoreRicavato" value="" >Metascore ricavato
+          </label>
+        </div>
+
+    </div>
+
+    <div class="col-sm-4">
+      <h5>Step 3</h5>  
+        <label >Cerca:</label> <br>
+       <button type="submit" onclick="mostraGrafico()" class="btn btn-primary">Cerca</button>
+    </div>
+
+      </div>
+     
+
+    </div>
+  </div>
+</div>
+
+<script>
+var registiLista=[];
+
+
+$.ajax({
+        url: "http://localhost:8080/api/getDirectors",
+        type: "GET",
+        dataType: 'json',
+        contentType: "application/json",
+        success: function(resp){
+            $.each(resp.data, function( index, value ) {
+                registiLista.push(value._id);
+            });
+        },
+        error: function(err){
+            console.log(err)
+        }
+      })
+
+  autocomplete(document.getElementById("regista1"), registiLista);
+  autocomplete(document.getElementById("regista2"), registiLista);
+
+
+  function mostraGrafico(){
+      regista1=document.getElementById("regista1").value;
+      regista2=document.getElementById("regista2").value;
+      numeroFilm=0;
+      ratingMedio=0;
+      incassoTotale=0;
+      metascoreRicavato=0;
+
+      if(document.getElementById("numeroFilm").checked)
+        numeroFilm=1;
+      if(document.getElementById("ratingMedio").checked)
+        ratingMedio=1;
+      if(document.getElementById("incassoTotale").checked)
+        incassoTotale=1;
+      if(document.getElementById("metascoreRicavato").checked)
+        metascoreRicavato=1;
+      console.log("3Radar.html?"+regista1+"&"+regista2+"&"+numeroFilm+"&"+ratingMedio+"&"+incassoTotale+"&"+metascoreRicavato);
+      window.open("3Radar.html?"+regista1+"&"+regista2+"&"+numeroFilm+"&"+ratingMedio+"&"+incassoTotale+"&"+metascoreRicavato);
+  }
+</script>
+
+
+</body>
+</html>

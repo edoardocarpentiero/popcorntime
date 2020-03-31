@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>PopCorn Time</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+ <link rel="stylesheet" href="http://cdn.datatables.net/1.10.2/css/jquery.dataTables.min.css"></style>
+<script type="text/javascript" src="http://cdn.datatables.net/1.10.2/js/jquery.dataTables.min.js"></script>
+<style type="text/css">
+#schermata_caricamento
+{
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: white;
+}
+#schermata_caricamento > h2
+{
+    text-align: center;
+    margin-top: 17%;
+}
+#schermata_caricamento > img
+{
+    display: block;
+    margin: 0 auto;
+    width: 17%;
+}
+
+
+</style>
+
+</head>
+<body>
+
+<div  style="background-color: #08AEEA;background-image: linear-gradient(0deg, #08AEEA 0%, #2AF598 100%);" class="text-center shadow-lg">
+  <img style="width: 30%;"src="img/main.png">
+</div>
+  
+<div class="container">
+  <div class="row">
+    <div class="col-sm-12 text-center">
+      <br>
+      <h3 id="intestazione">Risultato!</h3>
+    </div>
+  </div>
+</div>
+
+
+<div class="container">
+  <div class="row">
+    <div class="col-sm-12">
+
+ <table id="myTable" class="table table-bordered table-hover " >
+            <thead>
+              <tr>
+                <th>Titolo</th>
+                <th>Genere</th>
+                <th>Regista</th>
+                <th>Anno</th>
+                <th>Rating</th>
+                <th>Incasso (milioni)</th>
+                <th>Durata</th>
+              </tr>
+            </thead>
+            <tbody id="myTable">
+              
+            </tbody>
+          </table>
+     
+     
+    </div>
+  </div>
+</div>
+
+<div id="schermata_caricamento">
+            <h2>Caricamento</h2>
+            <img src="img/source.gif">
+</div>
+
+
+<script>
+var ratingAnno=window.location.search.substring(1).split('&');
+
+document.getElementById("intestazione").innerHTML="Film del "+ratingAnno[0]+" con un rating maggiore di "+ratingAnno[1];
+$(document).ready(function(){
+    var table=$('#myTable').DataTable();
+
+    $.ajax({
+        url: "http://localhost:8080/api/get_best_movie_for_rating_year/"+ratingAnno[0]+"/"+ratingAnno[1],
+        type: "GET",
+        dataType: 'json',
+        contentType: "application/json",
+        success: function(resp){
+
+            $.each(resp.data, function( index, value ) {
+                generi="";
+                $.each(value.Genre, function(index,value){
+                    generi+="-"+value+"<br>";
+                });
+                table.row.add([
+                    value.Title,
+                    generi,
+                    value.Director,
+                    value.Year,
+                    value.Rating,
+                    value.Revenue,
+                    value.Runtime]).draw();
+            });
+
+        },
+        error: function(err){
+            console.log(err)
+        }
+      })
+});
+
+    $("#schermata_caricamento").fadeOut(400);
+
+
+</script>
+
+</body>
+</html>
+

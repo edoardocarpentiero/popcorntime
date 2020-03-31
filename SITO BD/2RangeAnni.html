@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Pop Corn Time</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+  <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+</head>
+<body>
+
+<div  style="background-color: #08AEEA;background-image: linear-gradient(0deg, #08AEEA 0%, #2AF598 100%);" class="text-center shadow-lg" >
+  <img style="width: 50%;"src="img/main.png">
+</div>
+
+
+
+<div class="container" style="margin-top:30px">
+  <div class="row">
+    <div class="col-sm-3">
+      <h2>Ricerca:</h2>
+      <ul class="nav nav-pills flex-column">
+        <li class="nav-item">
+          <a class="nav-link " href="index.html">Generica</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="1genere.html">Confronto Generi</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" href="2RangeAnni.html">Film per anni</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="3Regista.html">Confronto registi</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="4Ricavo.html">Incassi per genere</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="5Attore.html">Peggiori film per attore</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="6Rating.html">Migliori film per anno</a>
+        </li>
+      </ul>
+      <hr class="d-sm-none">
+    </div>
+    <div class="col-sm-9">
+       <div class="row">
+
+        <div class="col-sm-12 text-center">
+        <br>
+        <h4>Ricerca film per Range di Anni</h4>
+        <p>Visualizza la lista di film in un determinato intervallo di anni</p>
+        </div>
+
+      <div class="col-sm-8">
+      <h5>Step 1</h5>
+        
+        <form action="">
+        <label for="customRange">Seleziona Anni:</label>
+        <input id="myRange" type="range" class="custom-range"  name="points1" min="2006" max="2016" >
+        </form>
+        <p>Dal: <span id="demo"></span></p>
+        <form action="">
+        <input id="myRange2" type="range" class="custom-range" name="points2" min="2006" max="2016" >
+        </form>
+        <p>Al: <span id="demo2"></span></p>
+
+    </div>
+    <div class="col-sm-4">
+      <h5>Step 2</h5>  
+        <label >Cerca:</label> <br>
+       <button type="submit" onclick="apriTabella()" class="btn btn-primary">Cerca</button>
+    </div>
+
+      </div>
+ 
+
+    </div>
+  </div>
+</div>
+
+<script>
+var slider = document.getElementById("myRange");
+var output = document.getElementById("demo");
+output.innerHTML = slider.value;
+
+slider.oninput = function() {
+  output.innerHTML = this.value;
+}
+
+var slider2 = document.getElementById("myRange2");
+var output2 = document.getElementById("demo2");
+output2.innerHTML = slider2.value;
+
+slider2.oninput = function() {
+  output2.innerHTML = this.value;
+}
+
+function apriTabella(){
+  window.open("2Tab.html?"+slider.value+"&"+slider2.value);
+}
+
+</script>
+
+
+</body>
+</html>

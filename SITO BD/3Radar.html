@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>PopCorn Time</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+  <script src="Chart.min.js"></script>
+  <script src="utils.js"></script>
+  <style>
+  canvas {
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+  }
+  </style>
+
+</head>
+<body>
+
+<div  style="background-color: #08AEEA;background-image: linear-gradient(0deg, #08AEEA 0%, #2AF598 100%);" class="text-center shadow-lg">
+  <img style="width: 30%;"src="img/main.png">
+</div>
+  
+<div class="container">
+  <div class="row">
+    <div class="col-sm-12 text-center">
+      <br>
+      <h3>Grafico del confronto</h3>
+    </div>
+  </div>
+</div>
+
+
+<div class="container">
+  <div class="row">
+    <div class="col-sm-12 text-center">
+
+
+      <div class="chart-container" style=" height:90%; width:90%">
+        <canvas id="canvas"></canvas>
+      </div>
+      
+      
+     
+    </div>
+  </div>
+</div>
+
+
+<script>
+
+    var infoURL=window.location.search.substring(1).split('&');
+    regista1=infoURL[0].replace("%20"," ");
+    regista2=infoURL[1].replace("%20"," ");
+
+    numeroFilm=infoURL[2];
+    ratingMedio=infoURL[3];
+    incassoTotale=infoURL[4];
+    metascoreRicavato=infoURL[5];
+
+    var campiPresenti=[];
+
+    var numeroFilmRegisti=[];
+    var ratingMedioRegisti=[];
+    var incassoTotaleRegisti=[];
+    var metascoreRicavatoRegisti=[];
+
+
+    if(numeroFilm==1){
+        $.ajax({
+            url: "http://localhost:8080/api/getFilmDirector/"+regista1,
+            type: "GET",
+            dataType: 'json',
+            contentType: "application/json",
+            async:false,
+            success: function(resp){
+                numeroFilmRegisti.push(resp.data.length);
+            },
+            error: function(err){
+                console.log(err)
+            }
+          })
+
+          $.ajax({
+            url: "http://localhost:8080/api/getFilmDirector/"+regista2,
+            type: "GET",
+            dataType: 'json',
+            contentType: "application/json",
+            async:false,
+            success: function(resp){
+                numeroFilmRegisti.push(resp.data.length);
+                console.log(numeroFilmRegisti[0]);
+            },
+            error: function(err){
+                console.log(err)
+            }
+          })
+          campiPresenti.push("Numero Film Prodotti");
+    }
+
+    if(ratingMedio==1){
+      $.ajax({
+            url: "http://localhost:8080/api/getAVGRatingForDirector/"+regista1,
+            type: "GET",
+            dataType: 'json',
+            contentType: "application/json",
+            async:false,
+            success: function(resp){
+                ratingMedioRegisti.push(resp.data[0].media);
+            },
+            error: function(err){
+                console.log(err)
+            }
+          })
+
+          $.ajax({
+            url: "http://localhost:8080/api/getAVGRatingForDirector/"+regista2,
+            type: "GET",
+            dataType: 'json',
+            contentType: "application/json",
+            async:false,
+            success: function(resp){
+                ratingMedioRegisti.push(resp.data[0].media);
+            },
+            error: function(err){
+                console.log(err)
+            }
+          })
+          campiPresenti.push("Rating Medio");
+    }
+    if(incassoTotale==1){
+          $.ajax({
+            url: "http://localhost:8080/api/getTotalRevenueForDirector/"+regista1,
+            type: "GET",
+            dataType: 'json',
+            contentType: "application/json",
+            async:false,
+            success: function(resp){
+                incassoTotaleRegisti.push(resp.data[0].totale);
+            },
+            error: function(err){
+                console.log(err)
+            }
+          })
+
+          $.ajax({
+            url: "http://localhost:8080/api/getTotalRevenueForDirector/"+regista2,
+            type: "GET",
+            dataType: 'json',
+            contentType: "application/json",
+            async:false,
+            success: function(resp){
+                incassoTotaleRegisti.push(resp.data[0].totale);
+            },
+            error: function(err){
+                console.log(err)
+            }
+          })
+          campiPresenti.push("Incasso Totale");
+    }
+    if(metascoreRicavato==1){
+
+        $.ajax({
+            url: "http://localhost:8080/api/getTotalMetascoreForDirector/"+regista1,
+            type: "GET",
+            dataType: 'json',
+            contentType: "application/json",
+            async:false,
+            success: function(resp){
+                metascoreRicavatoRegisti.push(resp.data[0].totale);
+            },
+            error: function(err){
+                console.log(err)
+            }
+          })
+
+          $.ajax({
+            url: "http://localhost:8080/api/getTotalMetascoreForDirector/"+regista2,
+            type: "GET",
+            dataType: 'json',
+            contentType: "application/json",
+            async:false,
+            success: function(resp){
+                metascoreRicavatoRegisti.push(resp.data[0].totale);
+            },
+            error: function(err){
+                console.log(err)
+            }
+          })
+          campiPresenti.push("Metascore");
+
+
+
+    }
+
+    console.log(numeroFilmRegisti);
+    console.log(ratingMedioRegisti);
+    console.log(incassoTotaleRegisti);
+    console.log(metascoreRicavatoRegisti);
+
+
+    var color = Chart.helpers.color;
+    var config = {
+      type: 'radar',
+      data: {
+        labels: campiPresenti,
+        datasets: [{
+          label: regista1,
+          backgroundColor: color(window.chartColors.red).alpha(0.2).rgbString(),
+          borderColor: window.chartColors.red,
+          pointBackgroundColor: window.chartColors.red,
+          data: [numeroFilmRegisti[0],ratingMedioRegisti[0],incassoTotaleRegisti[0],metascoreRicavatoRegisti[0]]
+        }, {
+          label: regista2,
+          backgroundColor: color(window.chartColors.blue).alpha(0.2).rgbString(),
+          borderColor: window.chartColors.blue,
+          pointBackgroundColor: window.chartColors.blue,
+          data: [numeroFilmRegisti[1],ratingMedioRegisti[1],incassoTotaleRegisti[1],metascoreRicavatoRegisti[1]]
+        }]
+      },
+      options: {
+        legend: {
+          position: 'top',
+        },
+        title: {
+          display: true,
+          text: 'Confronto Registi'
+        },
+        scale: {
+          ticks: {
+            beginAtZero: true
+          }
+        }
+      }
+    };
+
+    window.onload = function() {
+      window.myRadar = new Chart(document.getElementById('canvas'), config);
+    };
+
+    setTimeout(myFunction, 200);
+
+    function myFunction(){
+      window.myRadar.update();
+    }
+  </script>
+
+</body>
+</html>
+

@@ -1,0 +1,44 @@
+<html>
+<head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script></head>
+<body>
+    <div id="prova">Ciao</div>
+    <button>A</button>
+</body>
+
+<script>
+    /*$(document).ready(function(){
+    $("button").click(function(){
+      var xhr = new XMLHttpRequest()
+        xhr.open('GET', 'http://localhost:8080/api/getFilms', true);
+        xhr.withCredentials = true;
+        xhr.onreadystatechange = function() {
+          if (xhr.readyState === 2) {}
+    }
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.send();
+    });
+  });*/
+
+  $("button").click(function(){
+  $.ajax({
+    url: "http://localhost:8080/api/getFimsForGenre/Action",
+    type: "GET",
+    dataType: 'json',
+    contentType: "application/json",
+    success: function(resp){
+        $.each(resp.data, function( index, value ) {
+            generi="\n";
+            $.each(value.Genre, function(index,value){
+                generi+=value+"\n";
+            });
+          console.log( index + ": " + value.Title +" - "+value.Description+"-->"+generi);
+        });
+    },
+    error: function(err){
+        console.log(err)
+    }
+  })
+})
+</script>
+</html>
