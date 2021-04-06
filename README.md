@@ -3,4 +3,4 @@ La piattaforma, sviluppata per il corso Basi di Dati II, consente la gestione de
 Questo sistema è stato realizzato attraverso la tecnologia NodeJS e MongoDB.
 
 # Autori
-Edoardo Carpentiero - Attilio Della Greca - Giovanni Danese
+Edoardo Carpentiero - Attilio Della Greca - Giovanni Danese (https://github.com/GianniDanese)
